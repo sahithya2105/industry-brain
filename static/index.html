@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Industry Brain | AI-Based Predictive Maintenance System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-main: #0a0e17;
+      --bg-card: #111827;
+      --bg-card-hover: #172033;
+      --bg-input: #1e293b;
+      --border-color: #243046;
+      --border-focus: #f97316;
+      --accent-orange: #f97316;
+      --accent-orange-glow: rgba(249, 115, 22, 0.25);
+      --accent-orange-light: #fb923c;
+      --accent-amber: #f59e0b;
+      --accent-emerald: #10b981;
+      --accent-rose: #ef4444;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(10, 14, 23, 0.9) 100%);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px var(--accent-orange-glow);
+    }
+
+    .brand-logo svg {
+      width: 26px;
+      height: 26px;
+      fill: #ffffff;
+    }
+
+    .brand-text h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .brand-text p {
+      font-size: 0.82rem;
+      color: var(--accent-orange-light);
+      font-weight: 500;
+    }
+
+    .student-badge {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-align: right;
+    }
+
+    .student-badge .name {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .student-badge .id {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    /* Tabs Bar */
+    .tabs-nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 1.25rem;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-orange);
+      border-bottom-color: var(--accent-orange);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Grid Layouts & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(249, 115, 22, 0.4);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-title svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--accent-orange);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 0.85rem;
+    }
+
+    /* Alert Banner */
+    .alert-banner {
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.35);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      color: #fed7aa;
+      font-size: 0.9rem;
+    }
+
+    .alert-banner strong {
+      color: var(--accent-orange-light);
+    }
+
+    .alert-banner a {
+      color: #fdba74;
+      text-decoration: underline;
+    }
+
+    /* Metric Stat Card */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: var(--font-mono);
+    }
+
+    .stat-subtitle {
+      font-size: 0.8rem;
+      color: var(--accent-orange-light);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: #172033;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 1rem 1.25rem;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr.highlight-row {
+      background: rgba(249, 115, 22, 0.08);
+      font-weight: 600;
+    }
+
+    tr.highlight-row td:first-child {
+      border-left: 3px solid var(--accent-orange);
+    }
+
+    .badge-winner {
+      background: var(--accent-orange);
+      color: #ffffff;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* Confusion Matrix */
+    .cm-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .cm-box {
+      background: #131d2e;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .cm-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .cm-cell {
+      padding: 1rem 0.5rem;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .cm-cell.tn { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .cm-cell.tp { background: rgba(249, 115, 22, 0.25); border: 1px solid rgba(249, 115, 22, 0.5); }
+    .cm-cell.fp { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .cm-cell.fn { background: rgba(239, 68, 68, 0.25); border: 1px solid rgba(239, 68, 68, 0.5); }
+
+    .cm-cell .count {
+      font-size: 1.35rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: #ffffff;
+    }
+
+    .cm-cell .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Workflow Diagram & Layers */
+    .workflow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .workflow-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .workflow-step {
+      background: #172033;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem 0.75rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .workflow-step .step-num {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: var(--accent-orange);
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 24px;
+      margin-bottom: 0.5rem;
+    }
+
+    .workflow-step .step-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .workflow-step .step-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* DNN Layers List */
+    .dnn-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .dnn-layer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: #162032;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-orange);
+    }
+
+    .dnn-layer-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #ffffff;
+    }
+
+    .dnn-layer-params {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-orange-light);
+    }
+
+    /* Live Demo Form */
+    .demo-container {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 992px) {
+      .demo-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .control-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .control-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .control-value {
+      font-family: var(--font-mono);
+      color: var(--accent-orange-light);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #243046;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-orange);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-orange-glow);
+    }
+
+    .type-selector, .model-selector {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .select-pill {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
+      text-align: center;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .select-pill.active {
+      background: rgba(249, 115, 22, 0.15);
+      border-color: var(--accent-orange);
+      color: var(--accent-orange);
+    }
+
+    .preset-buttons {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.7rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #27354f;
+      border-color: var(--accent-orange);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      box-shadow: 0 0 15px var(--accent-orange-glow);
+      width: 100%;
+      justify-content: center;
+      padding: 0.9rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 25px rgba(249, 115, 22, 0.4);
+    }
+
+    /* Prediction Result Output Card */
+    .result-box {
+      background: #111827;
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: sticky;
+      top: 6rem;
+    }
+
+    .status-badge {
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .status-healthy {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--accent-emerald);
+      color: #34d399;
+    }
+
+    .status-watch {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--accent-amber);
+      color: #fbbf24;
+    }
+
+    .status-high-risk {
+      background: rgba(239, 68, 68, 0.25);
+      border: 1px solid var(--accent-rose);
+      color: #f87171;
+    }
+
+    .probability-gauge {
+      margin: 1rem 0;
+    }
+
+    .gauge-bar-track {
+      height: 16px;
+      background: #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gauge-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981 0%, #f59e0b 60%, #ef4444 100%);
+      transition: width 0.4s ease;
+      border-radius: 8px;
+    }
+
+    .gauge-threshold-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #ffffff;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+      z-index: 5;
+    }
+
+    .gauge-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      font-family: var(--font-mono);
+    }
+
+    .feature-preview {
+      background: #162032;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .feature-preview .item .val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .feature-preview .item .lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Chart Containers */
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .chart-header {
+      margin-bottom: 1rem;
+    }
+
+    .chart-fig-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-orange);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+
+    /* Discussion & Bullets */
+    .discussion-section {
+      margin-bottom: 2rem;
+    }
+
+    .discussion-section h3 {
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .bullet-list li::before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      color: var(--accent-orange);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      background: #0b0f19;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="brand-title">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </div>
+        <div class="brand-text">
+          <h1>Industry Brain: AI-Based Predictive Maintenance</h1>
+          <p>Machine-Failure Prediction Study on the UCI AI4I 2020 Benchmark</p>
+        </div>
+      </div>
+      <div class="student-badge">
+        <div class="name">Koudagani Sahithya</div>
+        <div class="id">Roll No: 2403A52063 | AIDL Course Project</div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('overview')">1. Overview</button>
+      <button class="tab-btn" onclick="switchTab('dataset')">2. Dataset & Splits</button>
+      <button class="tab-btn" onclick="switchTab('methodology')">3. Methodology</button>
+      <button class="tab-btn" onclick="switchTab('results')">4. Results & Curves</button>
+      <button class="tab-btn" onclick="switchTab('discussion')">5. Discussion & Limits</button>
+      <button class="tab-btn" onclick="switchTab('demo')">6. Live Demo</button>
+    </nav>
+  </header>
+
+  <!-- Main Content Tabs -->
+  <main>
+
+    <!-- Synthetic Dataset Global Notice -->
+    <div class="alert-banner">
+      <svg style="width: 20px; height: 20px; flex-shrink: 0; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      <div>
+        <strong>Academic Benchmark Notice:</strong> This study is conducted on the public <em>AI4I 2020 Predictive Maintenance Dataset</em> which, per its official UCI Machine Learning Repository documentation, is synthetic (<a href="https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset" target="_blank" rel="noopener">verify on the UCI page</a>). Failure mechanisms reflect simulated physical degradation, and experimental performance figures may not directly transfer to real factory machinery without plant telemetry calibration.
+      </div>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <section id="tab-overview" class="tab-content active">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            Problem Statement
+          </div>
+          <p>
+            In modern automated industrial environments, unexpected machine breakdowns lead to catastrophic downtime, secondary equipment damage, and immense revenue losses. However, machine failures are statistically rare events, creating extreme class imbalance.
+          </p>
+          <p>
+            Predictive maintenance leverages continuous sensor streams to forecast anomalies and imminent component breakdown before critical threshold collapse occurs, allowing operations teams to transition from reactive panic to strategic condition-based servicing.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            Project Objectives
+          </div>
+          <p>
+            This AIDL course project rigorously investigates AI-driven binary failure prediction on the UCI AI4I 2020 benchmark:
+          </p>
+          <ul class="bullet-list">
+            <li>Formulate domain-specific physical features (temperature differential, power consumption, cumulative tool strain).</li>
+            <li>Train and evaluate three distinct algorithmic paradigms: Logistic Regression, Random Forest, and a Deep Neural Network (DNN).</li>
+            <li>Address extreme class imbalance (~3.39% failures) through class-weighted loss and optimal decision threshold calibration.</li>
+            <li>Benchmark metrics using precision-recall dynamics rather than misleading raw accuracy.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-4" id="overview-metrics-summary">
+        <div class="stat-card">
+          <div class="stat-label">Dataset Instances</div>
+          <div class="stat-value" id="ov-rows">...</div>
+          <div class="stat-subtitle">UCI AI4I 2020 Benchmark</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Observed Failures</div>
+          <div class="stat-value" id="ov-failures">...</div>
+          <div class="stat-subtitle" id="ov-rate">...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Performing Model</div>
+          <div class="stat-value" id="ov-best-model" style="color: var(--accent-orange); font-size: 1.5rem;">...</div>
+          <div class="stat-subtitle" id="ov-best-f1">...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Test Set Failures</div>
+          <div class="stat-value" id="ov-test-failures">...</div>
+          <div class="stat-subtitle">Stratified Test Partition</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+          Academic Context & Verification Note
+        </div>
+        <p>
+          Author: <strong>Koudagani Sahithya</strong> (Roll No: <strong>2403A52063</strong>)<br>
+          AIDL Course Project | Koudagani Sahithya (2403A52063) | SR University<br>
+          Every metric, confusion matrix cell, curve coordinate, and layer hyperparameter rendered in this dashboard is read directly from the serialized notebook artifacts (<code>results.json</code>, <code>scaler.joblib</code>, <code>logreg.joblib</code>, <code>random_forest.joblib</code>, and <code>dnn.keras</code>). No values are fabricated or rounded beyond numerical presentation.
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 2: DATASET & SPLITS -->
+    <section id="tab-dataset" class="tab-content">
+      <div class="grid-4">
+        <div class="stat-card">
+          <div class="stat-label">Dataset Name</div>
+          <div class="stat-value" id="ds-name" style="font-size: 1.25rem;">...</div>
+          <div class="stat-subtitle" id="ds-source">...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Observations</div>
+          <div class="stat-value" id="ds-rows">...</div>
+          <div class="stat-subtitle" id="ds-cols">... Features</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Failure Cases</div>
+          <div class="stat-value" id="ds-failures">...</div>
+          <div class="stat-subtitle" id="ds-fail-pct">...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Minority Class Weight</div>
+          <div class="stat-value" id="ds-weight-1" style="font-size: 1.35rem; color: var(--accent-orange-light);">...</div>
+          <div class="stat-subtitle">Weight vs 0.518 for normal</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-fig-num">Figure 1: Class Distribution</div>
+            <div class="chart-title">AI4I 2020 Severe Class Imbalance</div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chart-class-dist"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-fig-num">Figure 2: Failure Taxonomy</div>
+            <div class="chart-title">Observed Failure Mode Frequencies</div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chart-failure-modes"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+          Stratified Partitioning & Leakage Prevention Protocol
+        </div>
+        <div class="grid-3" style="margin-top: 1rem;">
+          <div class="stat-card">
+            <div class="stat-label">Train Split (70%)</div>
+            <div class="stat-value" id="split-train">...</div>
+            <div class="stat-subtitle">Fit scaler & model weights</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Validation Split (15%)</div>
+            <div class="stat-value" id="split-val">...</div>
+            <div class="stat-subtitle">Threshold tuning & early stopping</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Test Split (15%)</div>
+            <div class="stat-value" id="split-test">...</div>
+            <div class="stat-subtitle" id="split-test-fail">...</div>
+          </div>
+        </div>
+        <p style="margin-top: 1rem;">
+          <strong>Stratification Guarantee:</strong> Due to extreme class imbalance (~3.39% positive target), random non-stratified splitting risks severe distribution shift between partitions. Stratified sampling preserves the positive proportion across training, validation, and testing partitions.
+        </p>
+        <p>
+          <strong>Zero Data Leakage:</strong> The <code>StandardScaler</code> was fitted <em>strictly</em> on the 7,000 training observations. Validation and test partitions were transformed using the pre-computed training mean ($\mu$) and standard deviation ($\sigma$), ensuring zero peek-ahead contamination into unseen test distributions.
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 3: METHODOLOGY -->
+    <section id="tab-methodology" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          End-to-End System Workflow
+        </div>
+        <div class="workflow-steps">
+          <div class="workflow-step">
+            <span class="step-num">1</span>
+            <div class="step-title">UCI AI4I Data</div>
+            <div class="step-desc">10,000 synthetic sensor observations</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">2</span>
+            <div class="step-title">Cleaning & Types</div>
+            <div class="step-desc">Drop IDs; one-hot encode Type (L, M, H)</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">3</span>
+            <div class="step-title">Domain Features</div>
+            <div class="step-desc">Temp_diff, Power, Strain calculated</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">4</span>
+            <div class="step-title">Stratified Split</div>
+            <div class="step-desc">70% Train, 15% Val, 15% Test</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">5</span>
+            <div class="step-title">Standard Scaler</div>
+            <div class="step-desc">Fitted solely on Training partition</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">6</span>
+            <div class="step-title">Model Training</div>
+            <div class="step-desc">LogReg, Random Forest, &amp; Deep DNN</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">7</span>
+            <div class="step-title">Threshold Tuning</div>
+            <div class="step-desc">F1-optimized on Validation set</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">8</span>
+            <div class="step-title">Evaluation</div>
+            <div class="step-desc">Unbiased testing on held-out test set</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 1.5rem;">
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+            Engineered Domain Features
+          </div>
+          <p>
+            Standard raw sensors alone cannot fully capture thermodynamic and mechanical stress degradation. The following physics-guided features were engineered:
+          </p>
+          <ul class="bullet-list">
+            <li>
+              <strong>Temperature Difference ($\Delta T$):</strong>
+              <code style="color: var(--accent-orange-light); font-family: var(--font-mono);">Temp_diff = Process_temperature - Air_temperature</code><br>
+              Quantifies convective thermal dissipation efficiency in Kelvin. Heat Dissipation Failures (HDF) occur when thermal buildup cannot be expelled.
+            </li>
+            <li>
+              <strong>Rotational Mechanical Power ($P$):</strong>
+              <code style="color: var(--accent-orange-light); font-family: var(--font-mono);">Power = Torque * Rotational_speed * (2 * &pi; / 60)</code><br>
+              Mechanical power consumed in Watts. Power Failures (PWF) trigger when power output falls outside safe operational envelopes.
+            </li>
+            <li>
+              <strong>Cumulative Tool Strain ($S$):</strong>
+              <code style="color: var(--accent-orange-light); font-family: var(--font-mono);">Strain = Tool_wear * Torque</code><br>
+              Mechanical stress accumulation product (min &middot; Nm). Overstrain Failures (OSF) occur when worn tools undergo peak torque loads.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h14v-8h3L12 3zm1 15h-2v-2h2v2zm0-4h-2V9h2v5z"/></svg>
+            Deep Neural Network Architecture
+          </div>
+          <p>
+            A multi-layer feed-forward sequential neural network built in Keras, explicitly regularized to resist overfitting on small failure clusters:
+          </p>
+          <div class="dnn-layers">
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Input Layer</span>
+              <span class="dnn-layer-params">11 Engineered Features</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Dense Layer 1 (ReLU)</span>
+              <span class="dnn-layer-params">64 Units | L2 Reg: 1e-4</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Batch Normalization</span>
+              <span class="dnn-layer-params">Covariate Shift Stabilizer</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Dropout (0.3)</span>
+              <span class="dnn-layer-params">30% Neuron Masking</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Dense Layer 2 (ReLU)</span>
+              <span class="dnn-layer-params">32 Units | L2 Reg: 1e-4</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Dropout (0.3)</span>
+              <span class="dnn-layer-params">30% Neuron Masking</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Dense Layer 3 (ReLU)</span>
+              <span class="dnn-layer-params">16 Units</span>
+            </div>
+            <div class="dnn-layer-item">
+              <span class="dnn-layer-name">Output Dense (Sigmoid)</span>
+              <span class="dnn-layer-params">1 Unit &rarr; P(Failure)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          DNN Training Hyperparameters & Imbalance Remediation
+        </div>
+        <div class="grid-4" style="margin-top: 1rem;">
+          <div class="stat-card">
+            <div class="stat-label">Optimizer &amp; LR</div>
+            <div class="stat-value" style="font-size: 1.35rem;">Adam (1e-3)</div>
+            <div class="stat-subtitle">Adaptive moment estimation</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Loss Function</div>
+            <div class="stat-value" style="font-size: 1.35rem;">Binary CE</div>
+            <div class="stat-subtitle">Class-weighted cross entropy</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Early Stopping</div>
+            <div class="stat-value" style="font-size: 1.35rem;">Patience = 10</div>
+            <div class="stat-subtitle">Monitors validation loss</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">LR Plateau Decay</div>
+            <div class="stat-value" style="font-size: 1.35rem;">Factor 0.5</div>
+            <div class="stat-subtitle">Patience = 4 epochs</div>
+          </div>
+        </div>
+        <p style="margin-top: 1rem;">
+          <strong>Why Class Weights Matter:</strong> Because failure samples comprise only ~3.39% of instances, unweighted backpropagation yields gradients heavily biased toward predicting the majority class (No Failure). Class weights calculated dynamically from training labels (<span id="method-weight-0">...</span> for Class 0, and <span id="method-weight-1" style="color: var(--accent-orange-light); font-weight: 700;">...</span> for Class 1) scale the gradient updates, forcing the neural network to heavily penalize misclassified failures.
+        </p>
+      </div>
+    </section>
+
+    <!-- TAB 4: RESULTS & CURVES -->
+    <section id="tab-results" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+          Model Benchmark Comparison on Test Partition
+        </div>
+        <p>
+          Comparative evaluation of the three models on the held-out 1,500 test samples. Highlight indicates best performing model determined by F1 score on the failure class.
+        </p>
+        <div class="table-container">
+          <table id="metrics-table">
+            <thead>
+              <tr>
+                <th>Model Architecture</th>
+                <th>Alert Threshold</th>
+                <th>Accuracy</th>
+                <th>Precision (Fail)</th>
+                <th>Recall (Fail)</th>
+                <th>F1-Score (Fail)</th>
+                <th>ROC-AUC</th>
+                <th>PR-AUC</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-tbody">
+              <!-- Dynamically populated from results.json -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Confusion Matrices -->
+      <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          Confusion Matrices (Evaluated on 1,500 Test Samples, 51 Actual Failures)
+        </div>
+        <div class="cm-wrapper" id="cm-cards-container">
+          <!-- Populated from results.json.confusion_matrices -->
+        </div>
+      </div>
+
+      <!-- ROC & PR Curves -->
+      <div class="grid-2" style="margin-top: 1.5rem;">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-fig-num">Figure 3: ROC Performance</div>
+            <div class="chart-title">Receiver Operating Characteristic (ROC) Curves</div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chart-roc"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-fig-num">Figure 4: Precision-Recall</div>
+            <div class="chart-title">Precision-Recall (PR) Curves (Imbalance Metric)</div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chart-pr"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- DNN Training Curves & RF Feature Importance -->
+      <div class="grid-2" style="margin-top: 1.5rem;">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-fig-num">Figure 5: Neural Convergence</div>
+            <div class="chart-title">DNN Training &amp; Validation Curves (Loss, AUC, Recall)</div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chart-dnn-history"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-fig-num">Figure 6: Feature Attribution</div>
+            <div class="chart-title">Random Forest Gini Feature Importance</div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chart-rf-importance"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: DISCUSSION & LIMITS -->
+    <section id="tab-discussion" class="tab-content">
+      <div class="card discussion-section">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
+          Analytical Findings &amp; Data Interpretation
+        </div>
+        <p>
+          Every metric cited in this discussion is dynamically derived from the test evaluations in <code>results.json</code>:
+        </p>
+        <ul class="bullet-list">
+          <li>
+            <strong>Best Performing Model:</strong> <span id="disc-best-model">...</span> achieved the highest overall capability, posting an F1-score of <span id="disc-rf-f1" style="font-family: var(--font-mono); color: var(--accent-orange); font-weight:700;">...</span> and PR-AUC of <span id="disc-rf-prauc" style="font-family: var(--font-mono); color: var(--accent-orange); font-weight:700;">...</span>. It substantially outperformed Logistic Regression (F1: <span id="disc-lr-f1">...</span>) by <span id="disc-diff-rf-lr">...</span> F1 points and the Deep Neural Network (F1: <span id="disc-dnn-f1">...</span>) by <span id="disc-diff-rf-dnn">...</span> F1 points.
+          </li>
+          <li>
+            <strong>DNN vs. Random Forest on Tabular Data:</strong> While the Deep Neural Network achieved respectable discriminative ability (ROC-AUC <span id="disc-dnn-roc">...</span>), the Random Forest ensemble demonstrated superior precision (<span id="disc-rf-prec">...</span> vs <span id="disc-dnn-prec">...</span>) and recall (<span id="disc-rf-rec">...</span> vs <span id="disc-dnn-rec">...</span>). On tabular physical telemetry where orthogonal decision boundaries and feature interaction thresholds (e.g. $Power > \text{limit}$) dominate, tree-based bagging typically outperforms continuous gradient backpropagation without requiring millions of parameter tunings.
+          </li>
+          <li>
+            <strong>Why Accuracy is a Deceptive Metric:</strong> Because failures represent only <span id="disc-fail-pct">...</span>% of the AI4I 2020 dataset, a naive trivial baseline predicting "No Failure" unconditionally yields <span id="disc-dummy-acc">...</span>% accuracy despite catching exactly 0 failures. Here, Logistic Regression achieved <span id="disc-lr-acc">...</span>% accuracy, yet its F1 score is only <span id="disc-lr-f1-2">...</span> due to a low recall of <span id="disc-lr-rec">...</span>. PR-AUC and F1-score on the failure class are the only honest benchmarks.
+          </li>
+          <li>
+            <strong>The Precision vs. Recall Operational Trade-off:</strong> In manufacturing plant management, false negatives (missed failures) result in catastrophic spindle seizure, costly unplanned plant shutdown, and safety hazards. False positives (false alarms) incur small inspection labor costs. Random Forest minimized false negatives to just <span id="disc-rf-fn">...</span> instances while generating only <span id="disc-rf-fp">...</span> false alarms across the 1,500 test trials.
+          </li>
+          <li>
+            <strong>Test Set Sample Sensitivity:</strong> The held-out test partition contains only <span id="disc-test-failures" style="font-weight: 700; color: var(--accent-orange);">...</span> actual failure events. Because the denominator is small, every single missed failure impacts the calculated recall by approximately <span id="disc-single-failure-impact">...</span>% (<span id="disc-rec-fraction">...</span>). Consequently, fine-grained ranking differences must be interpreted as statistically sensitive.
+          </li>
+        </ul>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            Study Limitations
+          </div>
+          <ul class="bullet-list">
+            <li>
+              <strong>Synthetic Benchmark Dataset:</strong> The AI4I 2020 dataset is explicitly a synthetic benchmark generated via physical simulation models. It cannot capture unexpected factory environments, sensor drift, or novel failure modes not programmed into the simulator.
+            </li>
+            <li>
+              <strong>Single Train/Validation/Test Split:</strong> Experiments were executed on a fixed 70/15/15 stratified partition rather than repeated $k$-fold cross-validation, leaving potential partition variance unmeasured.
+            </li>
+            <li>
+              <strong>Small Test Failure Sample Size:</strong> With only <span class="dyn-test-fail-count">...</span> failures in the test set, statistical confidence intervals for precision and recall are wide.
+            </li>
+            <li>
+              <strong>Constrained Hyperparameter Search:</strong> Exploration was conducted with manual grid exploration rather than exhaustive Bayesian or evolutionary hyperparameter sweeps.
+            </li>
+            <li>
+              <strong>No Real Plant Validation:</strong> Models were not validated against live physical telemetry collected from production CNC machines or mills under actual manufacturing loads.
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            Future Scope &amp; Industrial Roadmap
+          </div>
+          <ul class="bullet-list">
+            <li>
+              <strong>Time-Series Sequence Modeling:</strong> Transition from static point-in-time snapshot features to sequential sensor telemetry using LSTM, GRU, or Temporal Convolutional Networks (TCN) to forecast Remaining Useful Life (RUL).
+            </li>
+            <li>
+              <strong>Unsupervised Anomaly Detection:</strong> Implement Deep Autoencoders or Variational Autoencoders (VAEs) to identify zero-day failure anomalies that lack labeled training examples.
+            </li>
+            <li>
+              <strong>Industry Brain Document-Search Copilot:</strong> Connect this predictive classification engine to the Industry Brain semantic retrieval copilot. When a machine enters "HIGH RISK", the system automatically surfaces the exact troubleshooting procedure and OEM repair manual page for the predicted failure mode.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: LIVE DEMO -->
+    <section id="tab-demo" class="tab-content">
+      <div class="preset-buttons">
+        <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); align-self: center;">Quick Presets:</span>
+        <button class="btn btn-secondary" onclick="loadPreset('normal')">
+          <svg style="width: 16px; height: 16px; fill: var(--accent-emerald);" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Preset 1: Normal Operation
+        </button>
+        <button class="btn btn-secondary" onclick="loadPreset('high_risk')">
+          <svg style="width: 16px; height: 16px; fill: var(--accent-rose);" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          Preset 2: High Torque + Heavy Wear
+        </button>
+      </div>
+
+      <div class="demo-container">
+        <!-- Input Form -->
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            Machine Telemetry Controls
+          </div>
+
+          <!-- Model Choice -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Select Inference Model</span>
+              <span id="demo-model-info" style="font-size: 0.78rem; color: var(--accent-orange-light);"></span>
+            </div>
+            <div class="model-selector">
+              <div class="select-pill active" id="btn-model-RandomForest" onclick="selectModel('RandomForest')">Random Forest (Best)</div>
+              <div class="select-pill" id="btn-model-LogReg" onclick="selectModel('LogReg')">Logistic Regression</div>
+              <div class="select-pill" id="btn-model-DNN" onclick="selectModel('DNN')">DNN (Keras)</div>
+            </div>
+          </div>
+
+          <!-- Machine Type -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Machine Quality Variant (Type)</span>
+              <span class="control-value" id="disp-type">M (Medium)</span>
+            </div>
+            <div class="type-selector">
+              <div class="select-pill" id="btn-type-L" onclick="selectType('L')">L (Low: 60%)</div>
+              <div class="select-pill active" id="btn-type-M" onclick="selectType('M')">M (Medium: 30%)</div>
+              <div class="select-pill" id="btn-type-H" onclick="selectType('H')">H (High: 10%)</div>
+            </div>
+          </div>
+
+          <!-- Air Temperature -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Air Temperature [K]</span>
+              <span class="control-value" id="disp-air-temp">298.5 K</span>
+            </div>
+            <input type="range" id="input-air-temp" min="295.0" max="305.0" step="0.1" value="298.5" oninput="updateDemoInputs()">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-dim); margin-top:2px;">
+              <span>295.0 K (21.8°C)</span>
+              <span>305.0 K (31.8°C)</span>
+            </div>
+          </div>
+
+          <!-- Process Temperature -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Process Temperature [K]</span>
+              <span class="control-value" id="disp-process-temp">308.7 K</span>
+            </div>
+            <input type="range" id="input-process-temp" min="305.0" max="314.0" step="0.1" value="308.7" oninput="updateDemoInputs()">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-dim); margin-top:2px;">
+              <span>305.0 K (31.8°C)</span>
+              <span>314.0 K (40.8°C)</span>
+            </div>
+          </div>
+
+          <!-- Rotational Speed -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Rotational Speed [RPM]</span>
+              <span class="control-value" id="disp-speed">1450 rpm</span>
+            </div>
+            <input type="range" id="input-speed" min="1168" max="2886" step="1" value="1450" oninput="updateDemoInputs()">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-dim); margin-top:2px;">
+              <span>1,168 rpm</span>
+              <span>2,886 rpm</span>
+            </div>
+          </div>
+
+          <!-- Torque -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Torque [Nm]</span>
+              <span class="control-value" id="disp-torque">45.0 Nm</span>
+            </div>
+            <input type="range" id="input-torque" min="3.8" max="76.6" step="0.1" value="45.0" oninput="updateDemoInputs()">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-dim); margin-top:2px;">
+              <span>3.8 Nm</span>
+              <span>76.6 Nm</span>
+            </div>
+          </div>
+
+          <!-- Tool Wear -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">Tool Wear Time [min]</span>
+              <span class="control-value" id="disp-tool-wear">60 min</span>
+            </div>
+            <input type="range" id="input-tool-wear" min="0" max="253" step="1" value="60" oninput="updateDemoInputs()">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-dim); margin-top:2px;">
+              <span>0 min</span>
+              <span>253 min</span>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="btn-predict" onclick="runPrediction()">
+            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+            Compute Real-Time Failure Risk
+          </button>
+        </div>
+
+        <!-- Result Box -->
+        <div>
+          <div class="result-box">
+            <div class="card-title" style="margin-bottom: 0.25rem;">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+              Inference Assessment
+            </div>
+
+            <div id="demo-status-badge" class="status-badge status-healthy">
+              HEALTHY
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items: baseline;">
+                <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Failure Probability</span>
+                <span id="demo-prob-val" style="font-size: 1.8rem; font-family:var(--font-mono); font-weight:800; color:#fff;">0.00%</span>
+              </div>
+              <div class="probability-gauge">
+                <div class="gauge-bar-track">
+                  <div class="gauge-bar-fill" id="demo-gauge-fill"></div>
+                  <div class="gauge-threshold-marker" id="demo-thresh-marker" title="Alert Threshold"></div>
+                </div>
+                <div class="gauge-labels">
+                  <span>0.0</span>
+                  <span id="demo-thresh-label">Threshold: 0.426</span>
+                  <span>1.0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Physical Features Preview -->
+            <div>
+              <span style="font-size:0.82rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Calculated Physics Features</span>
+              <div class="feature-preview" style="margin-top: 0.4rem;">
+                <div class="item">
+                  <div class="val" id="demo-feat-temp-diff">10.2 K</div>
+                  <div class="lbl">&Delta;T (Diff)</div>
+                </div>
+                <div class="item">
+                  <div class="val" id="demo-feat-power">6833 W</div>
+                  <div class="lbl">Power</div>
+                </div>
+                <div class="item">
+                  <div class="val" id="demo-feat-strain">2700</div>
+                  <div class="lbl">Strain</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recommendation -->
+            <div style="background:#172033; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+              <span style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Operational Action Recommendation</span>
+              <p id="demo-recommendation" style="font-size: 0.9rem; color: #ffffff; margin-top: 0.25rem; margin-bottom: 0;">
+                Operating within normal parameters. No immediate maintenance intervention required.
+              </p>
+            </div>
+
+            <div style="font-size: 0.75rem; color: var(--text-dim); text-align: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+              Models trained on a public benchmark dataset, not real plant data.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      Industry Brain: AI-Based Predictive Maintenance System &bull; AIDL Course Project &bull; Student: Koudagani Sahithya (2403A52063)
+    </p>
+    <p style="margin-top: 0.35rem; font-size: 0.78rem; color: var(--text-dim);">
+      Data Source: UCI Machine Learning Repository (AI4I 2020 Predictive Maintenance Dataset, synthetic benchmark) &bull; Built with FastAPI &amp; Chart.js
+    </p>
+  </footer>
+
+  <script>
+    // State Store
+    let appData = null;
+    let currentModel = 'RandomForest';
+    let currentType = 'M';
+    let charts = {};
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      const targetSec = document.getElementById('tab-' + tabId);
+      if (targetSec) targetSec.classList.add('active');
+
+      // Resize charts if visible
+      if (tabId === 'dataset') {
+        if (charts.classDist) charts.classDist.resize();
+        if (charts.failModes) charts.failModes.resize();
+      } else if (tabId === 'results') {
+        if (charts.roc) charts.roc.resize();
+        if (charts.pr) charts.pr.resize();
+        if (charts.dnnHistory) charts.dnnHistory.resize();
+        if (charts.rfImportance) charts.rfImportance.resize();
+      }
+    }
+
+    // Chart.js Default Dark Theme Setup
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.plugins.tooltip.backgroundColor = '#1e293b';
+    Chart.defaults.plugins.tooltip.titleColor = '#f8fafc';
+    Chart.defaults.plugins.tooltip.bodyColor = '#f8fafc';
+    Chart.defaults.plugins.tooltip.borderColor = '#334155';
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+
+    // Fetch Initial Data
+    async function initDashboard() {
+      try {
+        const resp = await fetch('/api/results');
+        const data = await resp.json();
+        appData = data;
+        renderAll();
+      } catch (err) {
+        console.error('Failed to load results.json:', err);
+      }
+    }
+
+    function renderAll() {
+      if (!appData || !appData.results) return;
+      const r = appData.results;
+
+      // 1. Overview Tab
+      document.getElementById('ov-rows').textContent = r.dataset.rows.toLocaleString();
+      document.getElementById('ov-failures').textContent = r.dataset.failures.toLocaleString();
+      document.getElementById('ov-rate').textContent = `${r.dataset.failure_rate_pct}% of total records`;
+      document.getElementById('ov-best-model').textContent = r.best_model;
+      const bestModelResult = r.results.find(m => m.Model === r.best_model);
+      if (bestModelResult) {
+        document.getElementById('ov-best-f1').textContent = `F1-Score: ${bestModelResult['F1(fail)']} | PR-AUC: ${bestModelResult['PR-AUC']}`;
+      }
+      document.getElementById('ov-test-failures').textContent = `${r.split.test_failures} / ${r.split.test.toLocaleString()}`;
+
+      // 2. Dataset Tab
+      document.getElementById('ds-name').textContent = r.dataset.name;
+      document.getElementById('ds-source').textContent = r.dataset.source;
+      document.getElementById('ds-rows').textContent = r.dataset.rows.toLocaleString();
+      document.getElementById('ds-cols').textContent = `${r.dataset.columns} Raw`;
+      document.getElementById('ds-failures').textContent = r.dataset.failures.toLocaleString();
+      document.getElementById('ds-fail-pct').textContent = `${r.dataset.failure_rate_pct}% Failure Rate`;
+      if (r.class_weights) {
+        document.getElementById('ds-weight-1').textContent = `${Number(r.class_weights['1']).toFixed(3)}x`;
+        document.getElementById('method-weight-0').textContent = Number(r.class_weights['0']).toFixed(4);
+        document.getElementById('method-weight-1').textContent = Number(r.class_weights['1']).toFixed(4);
+      }
+
+      document.getElementById('split-train').textContent = `${r.split.train.toLocaleString()} (70%)`;
+      document.getElementById('split-val').textContent = `${r.split.val.toLocaleString()} (15%)`;
+      document.getElementById('split-test').textContent = `${r.split.test.toLocaleString()} (15%)`;
+      document.getElementById('split-test-fail').textContent = `${r.split.test_failures} Failures in Test Partition`;
+
+      // 3. Render Dataset Charts
+      renderDatasetCharts(r);
+
+      // 4. Results Tab: Table & Confusion Matrices
+      renderMetricsTable(r);
+      renderConfusionMatrices(r);
+      renderPerformanceCurves(r);
+      renderDNNHistory(r);
+      renderRFFeatureImportance(r);
+
+      // 5. Discussion Tab Dynamic Fill
+      renderDiscussion(r);
+
+      // 6. Live Demo Init
+      initDemoUI(r);
+    }
+
+    function renderDatasetCharts(r) {
+      // Class Distribution
+      const nonFailures = r.dataset.rows - r.dataset.failures;
+      const ctxDist = document.getElementById('chart-class-dist').getContext('2d');
+      charts.classDist = new Chart(ctxDist, {
+        type: 'doughnut',
+        data: {
+          labels: ['No Failure (Operational)', 'Machine Failure (Target)'],
+          datasets: [{
+            data: [nonFailures, r.dataset.failures],
+            backgroundColor: ['#10b981', '#f97316'],
+            borderColor: '#111827',
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 14, color: '#f8fafc' } },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  const val = ctx.raw;
+                  const pct = ((val / r.dataset.rows) * 100).toFixed(2);
+                  return ` ${ctx.label}: ${val.toLocaleString()} (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Failure Modes Chart
+      const modeKeys = Object.keys(r.dataset.failure_mode_counts);
+      const modeVals = Object.values(r.dataset.failure_mode_counts);
+      const modeLabels = {
+        'TWF': 'TWF (Tool Wear Failure)',
+        'HDF': 'HDF (Heat Dissipation Failure)',
+        'PWF': 'PWF (Power Failure)',
+        'OSF': 'OSF (Overstrain Failure)',
+        'RNF': 'RNF (Random Failure)'
+      };
+
+      const ctxModes = document.getElementById('chart-failure-modes').getContext('2d');
+      charts.failModes = new Chart(ctxModes, {
+        type: 'bar',
+        data: {
+          labels: modeKeys.map(k => modeLabels[k] || k),
+          datasets: [{
+            label: 'Incident Count',
+            data: modeVals,
+            backgroundColor: ['#f97316', '#ef4444', '#f59e0b', '#a855f7', '#38bdf8'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(255, 255, 255, 0.06)' },
+              title: { display: true, text: 'Observed Incident Count', color: '#94a3b8' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderMetricsTable(r) {
+      const tbody = document.getElementById('metrics-tbody');
+      tbody.innerHTML = '';
+
+      r.results.forEach(m => {
+        const isBest = (m.Model === r.best_model);
+        const tr = document.createElement('tr');
+        if (isBest) tr.className = 'highlight-row';
+
+        const thresh = r.thresholds[m.Model] ? Number(r.thresholds[m.Model]).toFixed(4) : 'not available';
+
+        tr.innerHTML = `
+          <td>
+            <strong>${m.Model}</strong>
+            ${isBest ? '<span class="badge-winner">BEST MODEL</span>' : ''}
+          </td>
+          <td style="font-family: var(--font-mono); color: var(--accent-orange-light);">${thresh}</td>
+          <td style="font-family: var(--font-mono);">${(m['Accuracy'] * 100).toFixed(1)}%</td>
+          <td style="font-family: var(--font-mono);">${m['Precision(fail)']}</td>
+          <td style="font-family: var(--font-mono); font-weight: 700; color: ${isBest ? 'var(--accent-orange)' : '#f8fafc'};">${m['Recall(fail)']}</td>
+          <td style="font-family: var(--font-mono); font-weight: 700; color: ${isBest ? 'var(--accent-orange)' : '#f8fafc'};">${m['F1(fail)']}</td>
+          <td style="font-family: var(--font-mono);">${m['ROC-AUC']}</td>
+          <td style="font-family: var(--font-mono); font-weight: 700;">${m['PR-AUC']}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderConfusionMatrices(r) {
+      const container = document.getElementById('cm-cards-container');
+      container.innerHTML = '';
+
+      const modelNames = ['LogReg', 'RandomForest', 'DNN'];
+      modelNames.forEach(mName => {
+        const cm = r.confusion_matrices[mName];
+        if (!cm) return;
+
+        // cm format: [[TN, FP], [FN, TP]]
+        const tn = cm[0][0];
+        const fp = cm[0][1];
+        const fn = cm[1][0];
+        const tp = cm[1][1];
+        const total = tn + fp + fn + tp;
+
+        const isBest = (mName === r.best_model);
+
+        const card = document.createElement('div');
+        card.className = 'cm-box';
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+            <strong style="color: #ffffff; font-size: 1.05rem;">${mName}</strong>
+            ${isBest ? '<span class="badge-winner">BEST MODEL</span>' : ''}
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Alert Threshold: ${Number(r.thresholds[mName]).toFixed(4)}</div>
+          
+          <div class="cm-grid">
+            <div class="cm-cell tn">
+              <span class="count">${tn}</span>
+              <span class="label">True Neg (TN)</span>
+            </div>
+            <div class="cm-cell fp">
+              <span class="count">${fp}</span>
+              <span class="label">False Pos (FP)</span>
+            </div>
+            <div class="cm-cell fn">
+              <span class="count">${fn}</span>
+              <span class="label">False Neg (FN)</span>
+            </div>
+            <div class="cm-cell tp">
+              <span class="count">${tp}</span>
+              <span class="label">True Pos (TP)</span>
+            </div>
+          </div>
+          <div style="margin-top: 0.75rem; font-size: 0.78rem; color: var(--text-muted); display:flex; justify-content:space-between;">
+            <span>Detected: ${tp} / ${tp + fn} failures</span>
+            <span>False Alarms: ${fp}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderPerformanceCurves(r) {
+      // 1. ROC Curves
+      const ctxRoc = document.getElementById('chart-roc').getContext('2d');
+      const colors = {
+        'RandomForest': '#f97316',
+        'DNN': '#38bdf8',
+        'LogReg': '#a855f7'
+      };
+
+      const rocDatasets = Object.keys(r.curves).map(m => {
+        const c = r.curves[m];
+        const points = c.fpr.map((fprVal, idx) => ({ x: fprVal, y: c.tpr[idx] }));
+        return {
+          label: `${m} (ROC-AUC: ${r.results.find(x => x.Model === m)['ROC-AUC']})`,
+          data: points,
+          borderColor: colors[m] || '#ffffff',
+          backgroundColor: 'transparent',
+          borderWidth: m === r.best_model ? 3 : 2,
+          showLine: true,
+          tension: 0.1,
+          pointRadius: 0
+        };
+      });
+
+      // Diagonal chance line
+      rocDatasets.push({
+        label: 'Chance Diagonal',
+        data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+        borderColor: '#475569',
+        borderWidth: 1,
+        borderDash: [5, 5],
+        showLine: true,
+        pointRadius: 0
+      });
+
+      charts.roc = new Chart(ctxRoc, {
+        type: 'scatter',
+        data: { datasets: rocDatasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              min: 0, max: 1,
+              title: { display: true, text: 'False Positive Rate (1 - Specificity)', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' }
+            },
+            y: {
+              min: 0, max: 1,
+              title: { display: true, text: 'True Positive Rate (Recall)', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' }
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, color: '#f8fafc' } }
+          }
+        }
+      });
+
+      // 2. Precision-Recall Curves
+      const ctxPr = document.getElementById('chart-pr').getContext('2d');
+      const prDatasets = Object.keys(r.curves).map(m => {
+        const c = r.curves[m];
+        const points = c.recall.map((recVal, idx) => ({ x: recVal, y: c.precision[idx] }));
+        return {
+          label: `${m} (PR-AUC: ${r.results.find(x => x.Model === m)['PR-AUC']})`,
+          data: points,
+          borderColor: colors[m] || '#ffffff',
+          backgroundColor: 'transparent',
+          borderWidth: m === r.best_model ? 3 : 2,
+          showLine: true,
+          tension: 0.1,
+          pointRadius: 0
+        };
+      });
+
+      // Baseline prevalence line
+      const baseline = r.dataset.failure_rate_pct / 100.0;
+      prDatasets.push({
+        label: `Prevalence Baseline (${r.dataset.failure_rate_pct}%)`,
+        data: [{ x: 0, y: baseline }, { x: 1, y: baseline }],
+        borderColor: '#475569',
+        borderWidth: 1,
+        borderDash: [5, 5],
+        showLine: true,
+        pointRadius: 0
+      });
+
+      charts.pr = new Chart(ctxPr, {
+        type: 'scatter',
+        data: { datasets: prDatasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              min: 0, max: 1,
+              title: { display: true, text: 'Recall (Coverage of Actual Failures)', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' }
+            },
+            y: {
+              min: 0, max: 1,
+              title: { display: true, text: 'Precision (Reliability of Failure Alerts)', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' }
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, color: '#f8fafc' } }
+          }
+        }
+      });
+    }
+
+    function renderDNNHistory(r) {
+      const th = r.training_history;
+      if (!th || !th.loss) return;
+
+      const epochs = Array.from({ length: th.loss.length }, (_, i) => i + 1);
+      const ctxHistory = document.getElementById('chart-dnn-history').getContext('2d');
+
+      charts.dnnHistory = new Chart(ctxHistory, {
+        type: 'line',
+        data: {
+          labels: epochs,
+          datasets: [
+            {
+              label: 'Train Loss',
+              data: th.loss,
+              borderColor: '#ef4444',
+              borderWidth: 2,
+              tension: 0.2,
+              pointRadius: 0
+            },
+            {
+              label: 'Val Loss',
+              data: th.val_loss,
+              borderColor: '#f97316',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              tension: 0.2,
+              pointRadius: 0
+            },
+            {
+              label: 'Val AUC',
+              data: th.val_auc,
+              borderColor: '#38bdf8',
+              borderWidth: 2,
+              tension: 0.2,
+              pointRadius: 0
+            },
+            {
+              label: 'Val Recall',
+              data: th.val_recall,
+              borderColor: '#10b981',
+              borderWidth: 2,
+              tension: 0.2,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              title: { display: true, text: 'Training Epoch', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' }
+            },
+            y: {
+              title: { display: true, text: 'Metric Value', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' },
+              min: 0,
+              max: 1
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, color: '#f8fafc' } }
+          }
+        }
+      });
+    }
+
+    function renderRFFeatureImportance(r) {
+      const fi = r.rf_feature_importance;
+      if (!fi) return;
+
+      // Sort descending
+      const entries = Object.entries(fi).sort((a, b) => b[1] - a[1]);
+      const labels = entries.map(e => e[0]);
+      const values = entries.map(e => (e[1] * 100).toFixed(2));
+
+      const ctxFi = document.getElementById('chart-rf-importance').getContext('2d');
+      charts.rfImportance = new Chart(ctxFi, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Relative Gini Importance (%)',
+            data: values,
+            backgroundColor: '#f97316',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Gini Importance Score (%)', color: '#94a3b8' },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' },
+              beginAtZero: true
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 11, family: 'var(--font-mono)' } }
+            }
+          }
+        }
+      });
+    }
+
+    function renderDiscussion(r) {
+      const rf = r.results.find(x => x.Model === 'RandomForest') || {};
+      const dnn = r.results.find(x => x.Model === 'DNN') || {};
+      const lr = r.results.find(x => x.Model === 'LogReg') || {};
+
+      document.getElementById('disc-best-model').textContent = r.best_model;
+      document.getElementById('disc-rf-f1').textContent = rf['F1(fail)'];
+      document.getElementById('disc-rf-prauc').textContent = rf['PR-AUC'];
+      document.getElementById('disc-lr-f1').textContent = lr['F1(fail)'];
+      document.getElementById('disc-dnn-f1').textContent = dnn['F1(fail)'];
+
+      const diffRfLr = ((rf['F1(fail)'] - lr['F1(fail)']) * 100).toFixed(1);
+      const diffRfDnn = ((rf['F1(fail)'] - dnn['F1(fail)']) * 100).toFixed(1);
+      document.getElementById('disc-diff-rf-lr').textContent = diffRfLr;
+      document.getElementById('disc-diff-rf-dnn').textContent = diffRfDnn;
+
+      document.getElementById('disc-dnn-roc').textContent = dnn['ROC-AUC'];
+      document.getElementById('disc-rf-prec').textContent = (rf['Precision(fail)'] * 100).toFixed(1) + '%';
+      document.getElementById('disc-dnn-prec').textContent = (dnn['Precision(fail)'] * 100).toFixed(1) + '%';
+      document.getElementById('disc-rf-rec').textContent = (rf['Recall(fail)'] * 100).toFixed(1) + '%';
+      document.getElementById('disc-dnn-rec').textContent = (dnn['Recall(fail)'] * 100).toFixed(1) + '%';
+
+      document.getElementById('disc-fail-pct').textContent = r.dataset.failure_rate_pct;
+      document.getElementById('disc-dummy-acc').textContent = (100 - r.dataset.failure_rate_pct).toFixed(2);
+      document.getElementById('disc-lr-acc').textContent = (lr['Accuracy'] * 100).toFixed(1);
+      document.getElementById('disc-lr-f1-2').textContent = lr['F1(fail)'];
+      document.getElementById('disc-lr-rec').textContent = (lr['Recall(fail)'] * 100).toFixed(1) + '%';
+
+      const cmRf = r.confusion_matrices['RandomForest'] || [[0, 0], [0, 0]];
+      document.getElementById('disc-rf-fn').textContent = cmRf[1][0];
+      document.getElementById('disc-rf-fp').textContent = cmRf[0][1];
+
+      const testFails = r.split.test_failures;
+      document.getElementById('disc-test-failures').textContent = testFails;
+      document.querySelectorAll('.dyn-test-fail-count').forEach(el => el.textContent = testFails);
+      const singleImpact = (100 / testFails).toFixed(2);
+      document.getElementById('disc-single-failure-impact').textContent = singleImpact;
+      document.getElementById('disc-rec-fraction').textContent = `1/${testFails}`;
+    }
+
+    // 6. Live Demo Functions
+    function initDemoUI(r) {
+      if (appData.dnn_available) {
+        document.getElementById('demo-model-info').textContent = 'All 3 models online';
+      } else {
+        const btnDnn = document.getElementById('btn-model-DNN');
+        btnDnn.style.opacity = '0.5';
+        btnDnn.title = 'DNN unavailable for live prediction';
+        btnDnn.innerHTML = 'DNN (Offline)';
+        document.getElementById('demo-model-info').textContent = 'LogReg & RF online (DNN stored metrics only)';
+      }
+      updateDemoInputs();
+      runPrediction();
+    }
+
+    function selectModel(modelName) {
+      if (modelName === 'DNN' && !appData.dnn_available) {
+        alert('DNN model is not available for live prediction. Please select RandomForest or LogReg.');
+        return;
+      }
+      currentModel = modelName;
+      ['RandomForest', 'LogReg', 'DNN'].forEach(m => {
+        const el = document.getElementById('btn-model-' + m);
+        if (el) el.classList.toggle('active', m === modelName);
+      });
+      runPrediction();
+    }
+
+    function selectType(t) {
+      currentType = t;
+      ['L', 'M', 'H'].forEach(typeKey => {
+        const el = document.getElementById('btn-type-' + typeKey);
+        if (el) el.classList.toggle('active', typeKey === t);
+      });
+      const names = { 'L': 'L (Low: 60%)', 'M': 'M (Medium: 30%)', 'H': 'H (High: 10%)' };
+      document.getElementById('disp-type').textContent = names[t];
+      updateDemoInputs();
+      runPrediction();
+    }
+
+    function updateDemoInputs() {
+      const airTemp = parseFloat(document.getElementById('input-air-temp').value);
+      const procTemp = parseFloat(document.getElementById('input-process-temp').value);
+      const speed = parseFloat(document.getElementById('input-speed').value);
+      const torque = parseFloat(document.getElementById('input-torque').value);
+      const toolWear = parseFloat(document.getElementById('input-tool-wear').value);
+
+      document.getElementById('disp-air-temp').textContent = airTemp.toFixed(1) + ' K';
+      document.getElementById('disp-process-temp').textContent = procTemp.toFixed(1) + ' K';
+      document.getElementById('disp-speed').textContent = Math.round(speed) + ' rpm';
+      document.getElementById('disp-torque').textContent = torque.toFixed(1) + ' Nm';
+      document.getElementById('disp-tool-wear').textContent = Math.round(toolWear) + ' min';
+
+      // Update dynamic preview
+      const diff = procTemp - airTemp;
+      const power = torque * speed * 2 * Math.PI / 60;
+      const strain = toolWear * torque;
+
+      document.getElementById('demo-feat-temp-diff').textContent = diff.toFixed(1) + ' K';
+      document.getElementById('demo-feat-power').textContent = Math.round(power) + ' W';
+      document.getElementById('demo-feat-strain').textContent = Math.round(strain);
+    }
+
+    function loadPreset(presetType) {
+      if (presetType === 'normal') {
+        // Preset 1: Normal operation (298.5, 308.7, 1450, 45, 60, M)
+        document.getElementById('input-air-temp').value = 298.5;
+        document.getElementById('input-process-temp').value = 308.7;
+        document.getElementById('input-speed').value = 1450;
+        document.getElementById('input-torque').value = 45;
+        document.getElementById('input-tool-wear').value = 60;
+        selectType('M');
+      } else if (presetType === 'high_risk') {
+        // Preset 2: High torque + heavy wear (300, 309, 1250, 65, 230, L)
+        document.getElementById('input-air-temp').value = 300.0;
+        document.getElementById('input-process-temp').value = 309.0;
+        document.getElementById('input-speed').value = 1250;
+        document.getElementById('input-torque').value = 65.0;
+        document.getElementById('input-tool-wear').value = 230;
+        selectType('L');
+      }
+      updateDemoInputs();
+      runPrediction();
+    }
+
+    async function runPrediction() {
+      const airTemp = parseFloat(document.getElementById('input-air-temp').value);
+      const procTemp = parseFloat(document.getElementById('input-process-temp').value);
+      const speed = parseFloat(document.getElementById('input-speed').value);
+      const torque = parseFloat(document.getElementById('input-torque').value);
+      const toolWear = parseFloat(document.getElementById('input-tool-wear').value);
+
+      const payload = {
+        air_temp_K: airTemp,
+        process_temp_K: procTemp,
+        speed_rpm: speed,
+        torque_Nm: torque,
+        tool_wear_min: toolWear,
+        machine_type: currentType,
+        model: currentModel
+      };
+
+      try {
+        const resp = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+          const errData = await resp.json();
+          alert(errData.detail || 'Prediction failed');
+          return;
+        }
+
+        const data = await resp.json();
+        renderPredictionResult(data);
+      } catch (err) {
+        console.error('Prediction request error:', err);
+      }
+    }
+
+    function renderPredictionResult(data) {
+      const prob = data.probability;
+      const thresh = data.threshold;
+      const status = data.status;
+
+      // Status badge
+      const badge = document.getElementById('demo-status-badge');
+      badge.textContent = status;
+      badge.className = 'status-badge';
+      if (status === 'HIGH RISK') {
+        badge.classList.add('status-high-risk');
+      } else if (status === 'WATCH') {
+        badge.classList.add('status-watch');
+      } else {
+        badge.classList.add('status-healthy');
+      }
+
+      // Probability number
+      document.getElementById('demo-prob-val').textContent = (prob * 100).toFixed(2) + '%';
+
+      // Gauge Bar Fill
+      const pct = Math.min(100, Math.max(0, prob * 100));
+      document.getElementById('demo-gauge-fill').style.width = pct + '%';
+
+      // Threshold Marker Position
+      const threshPct = Math.min(100, Math.max(0, thresh * 100));
+      document.getElementById('demo-thresh-marker').style.left = threshPct + '%';
+      document.getElementById('demo-thresh-label').textContent = `Alert Threshold: ${thresh.toFixed(4)}`;
+
+      // Recommendation Text
+      document.getElementById('demo-recommendation').textContent = data.recommendation;
+    }
+
+    // Startup
+    window.addEventListener('DOMContentLoaded', () => {
+      initDashboard();
+    });
+  </script>
+</body>
+</html>

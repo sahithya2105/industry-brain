@@ -1,0 +1,115 @@
+{
+  "best_model": "RandomForest",
+  "feature_columns": [
+    "Air_temperature",
+    "Process_temperature",
+    "Rotational_speed",
+    "Torque",
+    "Tool_wear",
+    "Temp_diff",
+    "Power",
+    "Strain",
+    "Type_H",
+    "Type_L",
+    "Type_M"
+  ],
+  "thresholds": {
+    "LogReg": 0.9065021112702331,
+    "RandomForest": 0.42585800574995164,
+    "DNN": 0.821322500705719
+  },
+  "watch_factor": 0.6,
+  "metrics": {
+    "LogReg": {
+      "Accuracy": 0.967,
+      "Precision": 0.513,
+      "Recall": 0.392,
+      "F1": 0.444,
+      "ROC-AUC": 0.937,
+      "PR-AUC": 0.443
+    },
+    "RandomForest": {
+      "Accuracy": 0.993,
+      "Precision": 0.955,
+      "Recall": 0.824,
+      "F1": 0.884,
+      "ROC-AUC": 0.985,
+      "PR-AUC": 0.906
+    },
+    "DNN": {
+      "Accuracy": 0.971,
+      "Precision": 0.556,
+      "Recall": 0.686,
+      "F1": 0.614,
+      "ROC-AUC": 0.971,
+      "PR-AUC": 0.611
+    }
+  },
+  "rf_feature_importance": {
+    "Air_temperature": 0.04874327018074907,
+    "Process_temperature": 0.03010593908306475,
+    "Rotational_speed": 0.20964745058262665,
+    "Torque": 0.18317818494673782,
+    "Tool_wear": 0.13436903796944455,
+    "Temp_diff": 0.08234857793796038,
+    "Power": 0.18411974971487194,
+    "Strain": 0.11512248939353975,
+    "Type_H": 0.0022731905761166717,
+    "Type_L": 0.005031867305173541,
+    "Type_M": 0.005060242309714892
+  },
+  "dnn_permutation_importance": {
+    "Air_temperature": 0.19220265609073917,
+    "Process_temperature": 0.15533491946828987,
+    "Rotational_speed": 0.3334141816491043,
+    "Torque": 0.29837488952000163,
+    "Tool_wear": 0.32797319949748027,
+    "Temp_diff": 0.14814335699038578,
+    "Power": 0.14253553502808686,
+    "Strain": 0.2651969493111158,
+    "Type_H": 0.08023432724861124,
+    "Type_L": 0.07403073637460289,
+    "Type_M": 0.017517174569210647
+  },
+  "input_ranges": {
+    "air_temp_K": {
+      "min": 295.3,
+      "max": 304.5,
+      "mean": 300.00493
+    },
+    "process_temp_K": {
+      "min": 305.7,
+      "max": 313.8,
+      "mean": 310.00555999999995
+    },
+    "speed_rpm": {
+      "min": 1168.0,
+      "max": 2886.0,
+      "mean": 1538.7761
+    },
+    "torque_Nm": {
+      "min": 3.8,
+      "max": 76.6,
+      "mean": 39.986909999999995
+    },
+    "tool_wear_min": {
+      "min": 0.0,
+      "max": 253.0,
+      "mean": 107.951
+    },
+    "machine_types": [
+      "L",
+      "M",
+      "H"
+    ]
+  },
+  "failure_rate": 0.0339,
+  "versions": {
+    "python": "3.11",
+    "scikit-learn": "1.6.1",
+    "joblib": "1.6.0",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "tensorflow": "2.21.0"
+  }
+}
