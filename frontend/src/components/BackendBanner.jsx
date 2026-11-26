@@ -28,11 +28,7 @@ export default function BackendBanner() {
       {backendOffline && (
         <div className="bg-terracotta-bg border-b border-terracotta-border text-terracotta-text px-4 py-2.5 text-xs sm:text-sm font-medium flex items-center justify-center gap-2 backdrop-blur z-50">
           <AlertCircle className="w-4 h-4 text-terracotta-text shrink-0" />
-          <span>
-            <strong>Backend Unreachable:</strong> FastAPI server is not responding at{' '}
-            <code className="bg-cream/60 border border-terracotta-border px-1.5 py-0.5 rounded font-mono text-xs text-terracotta-text">http://127.0.0.1:8000</code>.
-            Please ensure <code className="bg-cream/60 border border-terracotta-border px-1.5 py-0.5 rounded font-mono text-xs text-terracotta-text">uvicorn main:app --reload</code> is running.
-          </span>
+          <span>Backend not responding. If the live demo was idle, wait about a minute and refresh.</span>
         </div>
       )}
       {isDemoMode && !backendOffline && (

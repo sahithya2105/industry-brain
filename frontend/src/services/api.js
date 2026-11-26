@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
 
 async function handleResponse(res) {
   if (!res.ok) {
@@ -21,7 +21,7 @@ async function handleResponse(res) {
 export const api = {
   async getHealth() {
     try {
-      const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(5000) });
+      const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(10000) });
       return await handleResponse(res);
     } catch (err) {
       console.warn('Backend health check error:', err);
